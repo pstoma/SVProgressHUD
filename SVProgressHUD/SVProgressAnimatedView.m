@@ -26,17 +26,24 @@
 
 - (void)layoutAnimatedLayer {
     CALayer *layer = self.ringAnimatedLayer;
+
     [self.layer addSublayer:layer];
     
     CGFloat widthDiff = CGRectGetWidth(self.bounds) - CGRectGetWidth(layer.bounds);
     CGFloat heightDiff = CGRectGetHeight(self.bounds) - CGRectGetHeight(layer.bounds);
-    layer.position = CGPointMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(layer.bounds) / 2 - widthDiff / 2, CGRectGetHeight(self.bounds) - CGRectGetHeight(layer.bounds) / 2 - heightDiff / 2);
+    
+    layer.position = CGPointMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(layer.bounds) / 2 - widthDiff / 2,
+                                 CGRectGetHeight(self.bounds) - CGRectGetHeight(layer.bounds) / 2 - heightDiff / 2);
 }
 
 - (CAShapeLayer*)ringAnimatedLayer {
-    if(!_ringAnimatedLayer) {
-        CGPoint arcCenter = CGPointMake(self.radius+self.strokeThickness/2+5, self.radius+self.strokeThickness/2+5);
-        UIBezierPath* smoothedPath = [UIBezierPath bezierPathWithArcCenter:arcCenter radius:self.radius startAngle:(CGFloat)-M_PI_2 endAngle:(CGFloat) (M_PI + M_PI_2) clockwise:YES];
+    if (!_ringAnimatedLayer) {
+        CGPoint arcCenter = CGPointMake(self.radius + self.strokeThickness / 2 + 5, self.radius + self.strokeThickness / 2 + 5);
+        UIBezierPath* smoothedPath = [UIBezierPath bezierPathWithArcCenter:arcCenter
+                                                                    radius:self.radius
+                                                                startAngle:(CGFloat) - M_PI_2
+                                                                  endAngle:(CGFloat) (M_PI + M_PI_2)
+                                                                 clockwise:YES];
         
         _ringAnimatedLayer = [CAShapeLayer layer];
         _ringAnimatedLayer.contentsScale = [[UIScreen mainScreen] scale];
@@ -52,23 +59,23 @@
 }
 
 - (void)setFrame:(CGRect)frame {
-    if(!CGRectEqualToRect(frame, super.frame)) {
+    if (!CGRectEqualToRect(frame, super.frame)) {
         [super setFrame:frame];
         
-        if(self.superview) {
+        if (self.superview) {
             [self layoutAnimatedLayer];
         }
     }
 }
 
 - (void)setRadius:(CGFloat)radius {
-    if(radius != _radius) {
+    if (radius != _radius) {
         _radius = radius;
         
         [_ringAnimatedLayer removeFromSuperlayer];
         _ringAnimatedLayer = nil;
         
-        if(self.superview) {
+        if (self.superview) {
             [self layoutAnimatedLayer];
         }
     }
@@ -90,7 +97,7 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake((self.radius+self.strokeThickness/2+5)*2, (self.radius+self.strokeThickness/2+5)*2);
+    return CGSizeMake((self.radius + self.strokeThickness / 2 + 5) * 2, (self.radius + self.strokeThickness / 2 + 5) * 2);
 }
 
 @end

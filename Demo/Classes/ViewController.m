@@ -54,6 +54,24 @@
                                                object:nil];
     
     [self addObserver:self forKeyPath:@"activityCount" options:NSKeyValueObservingOptionNew context:nil];
+    
+    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleCustom];
+    [SVProgressHUD setMinimumSize:CGSizeMake(108, 108)];
+    [SVProgressHUD setRingRadius:20];
+    [SVProgressHUD setRingNoTextRadius:20];
+    [SVProgressHUD setRingThickness:5];
+    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:108/255 green:171/255 blue:221/255 alpha:1]];
+    [SVProgressHUD setCornerRadius:10];
+    
+    [SVProgressHUD setBackgroundColor:[[UIColor colorWithRed:51/255 green:51/255 blue:51/255 alpha:1] colorWithAlphaComponent:0.8]];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [SVProgressHUD show];
 }
 
 

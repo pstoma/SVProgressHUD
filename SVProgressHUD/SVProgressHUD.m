@@ -46,7 +46,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 
 @property (nonatomic, strong) UIView *indefiniteAnimatedView;
 @property (nonatomic, strong) SVProgressAnimatedView *ringView;
-@property (nonatomic, strong) SVProgressAnimatedView *backgroundRingView;
+@property (nonatomic, strong) UIImageView *backgroundRingView;
 
 @property (nonatomic, readwrite) CGFloat progress;
 @property (nonatomic, readwrite) NSUInteger activityCount;
@@ -424,6 +424,15 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
         self.userInteractionEnabled = NO;
         self.activityCount = 0;
         
+        NSBundle *bundle = [NSBundle bundleForClass:[SVProgressHUD class]];
+        NSURL *url = [bundle URLForResource:@"SVProgressHUD" withExtension:@"bundle"];
+        NSBundle *imageBundle = [NSBundle bundleWithURL:url];
+        
+        _infoImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"info" ofType:@"png"]];
+        _successImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"success" ofType:@"png"]];
+        _errorImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"error" ofType:@"png"]];
+        _circleImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"circle_hud_background" ofType:@"png"]];
+        
         self.backgroundView.alpha = 0.0f;
         self.imageView.alpha = 0.0f;
         self.statusLabel.alpha = 0.0f;
@@ -444,15 +453,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
         
         _imageViewSize = CGSizeMake(28.0f, 28.0f);
         _shouldTintImages = YES;
-        
-        NSBundle *bundle = [NSBundle bundleForClass:[SVProgressHUD class]];
-        NSURL *url = [bundle URLForResource:@"SVProgressHUD" withExtension:@"bundle"];
-        NSBundle *imageBundle = [NSBundle bundleWithURL:url];
-        
-        _infoImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"info" ofType:@"png"]];
-        _successImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"success" ofType:@"png"]];
-        _errorImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"error" ofType:@"png"]];
-        
+
         _ringThickness = 2.0f;
         _ringRadius = 18.0f;
         _ringNoTextRadius = 24.0f;
@@ -544,7 +545,10 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     
     if (self.progress != SVProgressHUDUndefinedProgress) {
         self.backgroundRingView.center = self.ringView.center = CGPointMake(CGRectGetMidX(self.hudView.bounds), centerY);
+    } else {
+        self.backgroundRingView.center = CGPointMake(CGRectGetMidX(self.hudView.bounds), centerY);
     }
+    
     self.imageView.center = CGPointMake(CGRectGetMidX(self.hudView.bounds), centerY);
     
     // Label
@@ -851,7 +855,12 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
                 [strongSelf cancelRingLayerAnimation];
                 
                 // Add indefiniteAnimatedView to HUD
+                if (!strongSelf.backgroundRingView.superview){
+                    [strongSelf.hudView.contentView addSubview:strongSelf.backgroundRingView];
+                }
+                
                 [strongSelf.hudView.contentView addSubview:strongSelf.indefiniteAnimatedView];
+                
                 if ([strongSelf.indefiniteAnimatedView respondsToSelector:@selector(startAnimating)]) {
                     [(id)strongSelf.indefiniteAnimatedView startAnimating];
                 }
@@ -1172,17 +1181,14 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     return _ringView;
 }
 
-- (SVProgressAnimatedView*)backgroundRingView {
+- (UIImageView *)backgroundRingView {
     if (!_backgroundRingView) {
-        _backgroundRingView = [[SVProgressAnimatedView alloc] initWithFrame:CGRectZero];
-        _backgroundRingView.strokeEnd = 1.0f;
+        _backgroundRingView = [[UIImageView alloc] initWithImage:_circleImage];
     }
     
-    // Update styling
-    _backgroundRingView.strokeColor = [self.foregroundImageColorForStyle colorWithAlphaComponent:0.1f];
-    _backgroundRingView.strokeThickness = self.ringThickness;
-    _backgroundRingView.radius = self.statusLabel.text ? self.ringRadius : self.ringNoTextRadius;
-    
+    _backgroundRingView.contentMode = UIViewContentModeCenter;
+    [_backgroundRingView sizeToFit];
+
     return _backgroundRingView;
 }
 

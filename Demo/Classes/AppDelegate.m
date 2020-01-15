@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "SVProgressHUD.h"
 
 @interface AppDelegate ()
 
@@ -15,10 +16,23 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    [self configureProgressHUD];
+    
     return YES;
 }
 
+- (void)configureProgressHUD {
+    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleCustom];
+    [SVProgressHUD setMinimumSize:CGSizeMake(108, 108)];
+    [SVProgressHUD setRingRadius:20];
+    [SVProgressHUD setRingNoTextRadius:20];
+    [SVProgressHUD setCornerRadius:10];
+    [SVProgressHUD setRingThickness:5];
+    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:108. / 255. green:171. / 255. blue:221. / 255. alpha:1]];
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:51. / 255. green:51. / 255. blue:51. / 255. alpha:1]];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

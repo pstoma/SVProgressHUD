@@ -52,7 +52,7 @@
         shapeLayer.lineCap = kCALineCapRound;
         shapeLayer.lineJoin = kCALineJoinRound;
         shapeLayer.path = smoothedPath.CGPath;
-        shapeLayer.strokeStart = 0.4f;
+        shapeLayer.strokeStart = 0.75f;
         shapeLayer.strokeEnd = 1.0f;
 
         _indefiniteAnimatedGradientLayer = [CAGradientLayer layer];
@@ -61,13 +61,13 @@
         _indefiniteAnimatedGradientLayer.frame = shapeLayer.bounds;
         
         _indefiniteAnimatedGradientLayer.colors = [NSArray arrayWithObjects:
-                                                   (id)[self.strokeColor colorWithAlphaComponent:0.0f].CGColor,
-                                                   (id)[self.strokeColor colorWithAlphaComponent:0.5f].CGColor,
+                                                   (id)self.strokeColor.CGColor,
+                                                   (id)self.strokeColor.CGColor,
                                                    (id)self.strokeColor.CGColor,
                                                    nil];
         
         _indefiniteAnimatedGradientLayer.locations = [NSArray arrayWithObjects:
-                                                      @(0.25f),
+                                                      @(0.0f),
                                                       @(0.5f),
                                                       @(1.0f),
                                                       nil];
